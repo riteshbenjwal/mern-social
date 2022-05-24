@@ -108,3 +108,54 @@ exports.likeAndUnlikePost = async (req, res) => {
     });
   }
 };
+
+exports.getPostOfFollowing = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    //One way
+
+    // //.populate(
+    //   "following",
+    //   "posts"
+    // );
+
+    const posts = await Post.find({
+      owner: {
+          $in: user.following,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+exports.updateCaption = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params._id);
+
+
+    if(!post){
+      return res.statu
+    }
+
+    res.status(200).json({
+      success: true,
+      posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

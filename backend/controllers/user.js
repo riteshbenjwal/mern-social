@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Post = require("../models/Post");
 
 exports.register = async (req, res) => {
   try {
@@ -203,10 +204,68 @@ exports.updateProfile = async (req, res) => {
     // User Avatar : todo
 
     await user.save();
-    
+
     res.status(200).json({
       success: true,
       message: "Profile Updated",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteMyProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const posts = user.posts;
+    const followers = user.followers;
+    const userId = user._id;
+    await user.remove();
+
+    //Logout user after remove
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    //Delete all associated Posts
+
+    for (let post = 0; post < posts.length; post++) {
+      const postToDelete = await Post.findById(postToDelete[i]);
+      await postToDelete.remove();
+    }
+
+    //Removing user from  followers following
+
+    for (let i = 0; i < followers.length; i++) {
+      const follower = await User.findById(followers[i]);
+      const index = follower.following.indexOf(userId);
+      follower.following.splice(index, 1);
+      await follower.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Account Removed",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.myProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate("posts");
+
+    res.status(200).json({
+      success: true,
+      user,
     });
   } catch (error) {
     res.status(500).json({

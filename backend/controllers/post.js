@@ -122,7 +122,7 @@ exports.getPostOfFollowing = async (req, res) => {
 
     const posts = await Post.find({
       owner: {
-          $in: user.following,
+        $in: user.following,
       },
     });
 
@@ -138,19 +138,30 @@ exports.getPostOfFollowing = async (req, res) => {
   }
 };
 
-
 exports.updateCaption = async (req, res) => {
   try {
-    const post = await Post.findById(req.params._id);
+    const post = await Post.findById(req.params.id);
 
-
-    if(!post){
-      return res.statu
+    if (!post) {
+      return res.status(400).json({
+        success: false,
+        message: "Post not exist",
+      });
     }
+
+    if (post.owner.toString() !== req.user._id.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    post.caption = req.body.caption;
+    await post.save();
 
     res.status(200).json({
       success: true,
-      posts,
+      message: "Post Updated",
     });
   } catch (error) {
     res.status(500).json({

@@ -14,10 +14,10 @@ export const likeReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
-  clearErrors: (state, action) => {
+  clearErrors: (state) => {
     state.error = null;
   },
-  clearMessage: (state, action) => {
+  clearMessage: (state) => {
     state.message = null;
   },
 });

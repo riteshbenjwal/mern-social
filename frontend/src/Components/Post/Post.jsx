@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useDispatch} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 
 import "./Post.css";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import {
   ChatBubbleOutline,
   DeleteOutline,
 } from "@mui/icons-material";
-import {likePost} from "../../Actions/Post"
+import { likePost } from "../../Actions/Post";
 
 const Post = ({
   postId,
@@ -25,22 +25,23 @@ const Post = ({
   isDelete = false,
   isAccount = false,
 }) => {
-
   const [liked, setLiked] = useState(false);
   const dispatch = useDispatch();
 
-  const handleLike = () => {
+  const handleLike = async () => {
     setLiked(!liked);
 
-    dispatch(likePost(postId));
+   await dispatch(likePost(postId));
   };
 
   return (
     <div className="post">
       <div className="postHeader">
-        {isAccount ? <Button>
-        <MoreVert/>
-        </Button> : null}
+        {isAccount ? (
+          <Button>
+            <MoreVert />
+          </Button>
+        ) : null}
       </div>
       <img src={postImage} alt="Post" />
       <div className="postDetails">

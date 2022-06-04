@@ -11,7 +11,8 @@ export const likeReducer = createReducer(initialState, {
     state.message = action.payload;
   },
   likeFailure: (state, action) => {
-    (state.loading = false), (state.error = action.payload);
+    state.loading = false;
+    state.error = action.payload;
   },
   clearErrors: (state, action) => {
     state.error = null;

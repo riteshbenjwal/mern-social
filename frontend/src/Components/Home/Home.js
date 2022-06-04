@@ -50,6 +50,7 @@ const Home = () => {
         {users && users.length > 0 ? (
           users.map((user) => (
             <User
+              key={user._id}
               userId={user._id}
               name={user.name}
               avatar={user.avatar.url}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useDispatch} from 'react-redux'
 
 import "./Post.css";
 import { Link } from "react-router-dom";
@@ -10,6 +11,7 @@ import {
   ChatBubbleOutline,
   DeleteOutline,
 } from "@mui/icons-material";
+import {likePost} from "../../Actions/Post"
 
 const Post = ({
   postId,
@@ -23,10 +25,14 @@ const Post = ({
   isDelete = false,
   isAccount = false,
 }) => {
+
   const [liked, setLiked] = useState(false);
+  const dispatch = useDispatch();
 
   const handleLike = () => {
     setLiked(!liked);
+
+    dispatch(likePost(postId));
   };
 
   return (
